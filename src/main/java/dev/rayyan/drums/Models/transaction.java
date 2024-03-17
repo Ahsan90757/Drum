@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import dev.rayyan.drums.Models.transactionItem;
 
 import java.util.List;
@@ -23,7 +23,13 @@ public class transaction {
     private String date;
     private String paymentMethod;
     private double amountReceived;
-    @DocumentReference
-    private List<transactionItem> transactionItemIds;
+    private List<transactionItem> transactionItems;
 
+//    public List<transactionItem> getTransactionItems(){
+//        return transactionItems;
+//    }
+
+    void test(){
+
+    }
 }
