@@ -1,4 +1,4 @@
-package dev.rayyan.drums;
+package dev.rayyan.drums.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

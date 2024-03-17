@@ -1,4 +1,4 @@
-package dev.rayyan.drums;
+package dev.rayyan.drums.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import dev.rayyan.drums.Models.transactionItem;
 
 import java.util.List;
 

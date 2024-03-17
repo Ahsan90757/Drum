@@ -1,4 +1,4 @@
-package dev.rayyan.drums;
+package dev.rayyan.drums.Controllers;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import dev.rayyan.drums.Services.transactionItemService;
+import dev.rayyan.drums.Models.transactionItem;
+
 
 @RestController
 @RequestMapping("/api/transactionItems")
