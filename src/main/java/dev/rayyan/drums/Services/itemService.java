@@ -25,6 +25,6 @@ public class itemService {
     }
 
     public item createItem(item item){
-        return itemRepositoryObj.save(item);
+        return itemRepositoryObj.insert(item);
     }
 }
