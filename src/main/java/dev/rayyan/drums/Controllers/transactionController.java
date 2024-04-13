@@ -31,13 +31,14 @@ public class transactionController {
 
     @PostMapping("")
     public ResponseEntity<transaction> createTransaction(@RequestBody transaction transaction) {
-
-
-
-
         transaction createdTransaction = transactionServiceObj.createTransaction(transaction);
         return new ResponseEntity<>(createdTransaction, HttpStatus.CREATED);
+    }
 
+    @GetMapping("/customer/{customerNumber}")
+    @ResponseBody
+    public List<transaction> getTransactionsByCustomerId(@PathVariable String customerNumber) {
+        return transactionServiceObj.transactionsByCustomerNumber(customerNumber);
     }
 
 }

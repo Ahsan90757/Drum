@@ -34,25 +34,35 @@ public class transactionService {
     public transaction createTransaction(transaction transaction) {
         System.out.println("_________________HERE____________________");
         for (transactionItem transactionItem : transaction.getTransactionItems()) {
-            String itemId = transactionItem.getItemId();
-            System.out.println("_________________ID:____________________"+itemId);
+//            String itemId = transactionItem.getItemId();
+            String itemName = transactionItem.getItemName();
+            System.out.println("_________________Name:____________________"+itemName);
             double quantity = transactionItem.getQuantity();
             System.out.println("_________________Quantity:____________________"+quantity);
 
             // Retrieve the item from the item repository
-            Optional<item> optionalItem = itemRepositoryObj.findById(itemId);
+            Optional<item> optionalItem = itemRepositoryObj.findByName(itemName);
+
             if (optionalItem.isPresent()) {
+                System.out.println("_____________Found_____________");
                 item item = optionalItem.get();
                 double remainingQuantity = item.getRemainingQuantity();
                 System.out.println("_________________remainingQuantity:____________________"+remainingQuantity);
                 // Check if there is sufficient quantity available
-                if (remainingQuantity >= quantity) {
-                    // Update the remaining quantity
-                    item.setRemainingQuantity(remainingQuantity - quantity);
+                if ("buying".equalsIgnoreCase(transaction.getType())) {
+                    // For buying transaction, add quantity to item's remaining quantity
+                    System.out.println("_________________HERE________________");
+                    item.setRemainingQuantity(remainingQuantity+quantity);
                     itemRepositoryObj.save(item);
                 } else {
-                    // Handle insufficient quantity error
-                    //throw new InsufficientQuantityException("Insufficient quantity available for item: " + item.getName());
+                    // For selling transaction, deduct quantity from item's remaining quantity
+                    if (remainingQuantity >= quantity) {
+                        item.setRemainingQuantity(remainingQuantity - quantity);
+                        itemRepositoryObj.save(item);
+                    } else {
+                        // Handle insufficient quantity error
+                        // You can throw an exception or handle it as needed
+                    }
                 }
             } else {
                 // Handle item not found error
@@ -62,4 +72,8 @@ public class transactionService {
 
         return transactionRepositoryObj.save(transaction);
     }
+    public List<transaction> transactionsByCustomerNumber(String customerNumber) {
+        return transactionRepositoryObj.findByCustomerNumber(customerNumber);
+    }
+
 }

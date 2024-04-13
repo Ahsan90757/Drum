@@ -27,7 +27,11 @@ public class itemController {
         return new ResponseEntity<Optional<item>>(itemServiceObj.getItemById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Optional<item>> getItemByName(@PathVariable String name) {
+        return new ResponseEntity<Optional<item>>(itemServiceObj.getItemByName(name), HttpStatus.OK);
+    }
+    @PostMapping("")
     public ResponseEntity<item> createItem(@RequestBody item item){
         return new ResponseEntity<item>(itemServiceObj.createItem(item),HttpStatus.CREATED);
     }

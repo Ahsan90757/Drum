@@ -19,7 +19,8 @@ public class transaction {
 
     @Id
     private ObjectId id;
-    private String customerId;
+    private String customerNumber;
+    private String type;
     private String date;
     private String paymentMethod;
     private double amountReceived;

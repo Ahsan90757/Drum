@@ -20,8 +20,10 @@ public class itemService {
     }
 
     public Optional<item> getItemById(String id) {
-
         return itemRepositoryObj.findById(id);
+    }
+    public Optional<item> getItemByName(String name) {
+        return itemRepositoryObj.findByName(name);
     }
 
     public item createItem(item item){
