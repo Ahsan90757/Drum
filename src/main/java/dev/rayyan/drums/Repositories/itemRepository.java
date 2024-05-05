@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface itemRepository extends MongoRepository<item, String> {
     Optional<item> findByName(String name);
+
+    void deleteByName(String name);
 }

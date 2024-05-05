@@ -22,17 +22,30 @@ public class itemController {
         return new ResponseEntity<List<item>>(itemServiceObj.getAllItems(),HttpStatus.OK );
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<item>> getItemById(@PathVariable String id) {
-        return new ResponseEntity<Optional<item>>(itemServiceObj.getItemById(id), HttpStatus.OK);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Optional<item>> getItemById(@PathVariable String id) {
+//        return new ResponseEntity<Optional<item>>(itemServiceObj.getItemById(id), HttpStatus.OK);
+//    }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Optional<item>> getItemByName(@PathVariable String name) {
         return new ResponseEntity<Optional<item>>(itemServiceObj.getItemByName(name), HttpStatus.OK);
     }
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("")
     public ResponseEntity<item> createItem(@RequestBody item item){
         return new ResponseEntity<item>(itemServiceObj.createItem(item),HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{name}")
+    public ResponseEntity<String> deleteItemByName(@PathVariable String name) {
+        try {
+            // Attempt to delete the item by name
+            itemServiceObj.deleteItemByName(name);
+            return new ResponseEntity<>("Item deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle any errors that occur during deletion
+            return new ResponseEntity<>("Failed to delete item", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

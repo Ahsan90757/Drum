@@ -26,8 +26,25 @@ public class customerController
     public ResponseEntity<Optional<customer>> getCustomerById(@PathVariable String id){
         return new ResponseEntity<Optional<customer>>(customerServiceObj.getCustomerById(id),HttpStatus.OK);
     }
+    @GetMapping("/name/{customerName}")
+    public ResponseEntity<Optional<customer>> getCustomerByName(@PathVariable String customerName) {
+        return new ResponseEntity<Optional<customer>>(customerServiceObj.getCustomerByName(customerName), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<customer> createCustomer(@RequestBody customer customer){
         return new ResponseEntity<customer>(customerServiceObj.createCustomer(customer),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{customerName}")
+    public ResponseEntity<String> deleteCustomerByName(@PathVariable String customerName) {
+        try {
+            // Attempt to delete the item by name
+            customerServiceObj.deleteCustomerByName(customerName);
+            return new ResponseEntity<>("Item deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle any errors that occur during deletion
+            return new ResponseEntity<>("Failed to delete item", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -19,4 +19,10 @@ public class customerService {
 
     public customer createCustomer (customer customer){ return customerRepositoryObj.save(customer);}
 
+    public void deleteCustomerByName(String customerName) {
+        customerRepositoryObj.deleteByCustomerName(customerName);
+    }
+    public Optional<customer> getCustomerByName(String customerName) {
+        return customerRepositoryObj.findByCustomerName(customerName);
+    }
 }

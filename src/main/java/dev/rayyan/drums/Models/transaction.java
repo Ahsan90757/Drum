@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import dev.rayyan.drums.Models.transactionItem;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,7 +22,7 @@ public class transaction {
     private ObjectId id;
     private String customerNumber;
     private String type;
-    private String date;
+    private Date date;
     private String paymentMethod;
     private double amountReceived;
     private List<transactionItem> transactionItems;
