@@ -21,10 +21,13 @@ public class transaction {
     @Id
     private ObjectId id;
     private String customerNumber;
-    private String type;
+    private String transactionType;
     private Date date;
     private String paymentMethod;
-    private double amountReceived;
+    private String receivedBy;
+    private int amountReceived;
+    private int totalAmount;
+//    private int remainingAmount;
     private List<transactionItem> transactionItems;
 
 //    public List<transactionItem> getTransactionItems(){

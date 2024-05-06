@@ -8,7 +8,13 @@ import dev.rayyan.drums.Models.item;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
 
 import javax.swing.text.html.Option;
 import java.io.ObjectInput;
@@ -32,48 +38,29 @@ public class transactionService {
     }
 
     public transaction createTransaction(transaction transaction) {
-        System.out.println("_________________HERE____________________");
         for (transactionItem transactionItem : transaction.getTransactionItems()) {
-//            String itemId = transactionItem.getItemId();
             String itemName = transactionItem.getItemName();
-            System.out.println("_________________Name:____________________"+itemName);
             double quantity = transactionItem.getQuantity();
-            System.out.println("_________________Quantity:____________________"+quantity);
 
-            // Retrieve the item from the item repository
             Optional<item> optionalItem = itemRepositoryObj.findByName(itemName);
 
             if (optionalItem.isPresent()) {
-                System.out.println("_____________Found_____________");
-                item item = optionalItem.get();
-                double remainingQuantity = item.getRemainingQuantity();
-                System.out.println("_________________remainingQuantity:____________________"+remainingQuantity);
-                // Check if there is sufficient quantity available
-                if ("buying".equalsIgnoreCase(transaction.getType())) {
-                    // For buying transaction, add quantity to item's remaining quantity
-                    System.out.println("_________________HERE________________");
-                    item.setRemainingQuantity(remainingQuantity+quantity);
-                    itemRepositoryObj.save(item);
+                item existingItem = optionalItem.get();
+                double remainingQuantity = existingItem.getRemainingQuantity();
+                if ("buying".equalsIgnoreCase(transaction.getTransactionType())) {
+                    existingItem.setRemainingQuantity(remainingQuantity + quantity);
                 } else {
-                    // For selling transaction, deduct quantity from item's remaining quantity
                     if (remainingQuantity >= quantity) {
-                        item.setRemainingQuantity(remainingQuantity - quantity);
-                        itemRepositoryObj.save(item);
-                    } else {
-                        // Handle insufficient quantity error
-                        // You can throw an exception or handle it as needed
+                        existingItem.setRemainingQuantity(remainingQuantity - quantity);
                     }
                 }
-            } else {
-                // Handle item not found error
-                //throw new ItemNotFoundException("Item not found with ID: " + itemId);
+                itemRepositoryObj.save(existingItem);
             }
         }
-
         return transactionRepositoryObj.save(transaction);
     }
+
     public List<transaction> transactionsByCustomerNumber(String customerNumber) {
         return transactionRepositoryObj.findByCustomerNumber(customerNumber);
     }
-
 }
