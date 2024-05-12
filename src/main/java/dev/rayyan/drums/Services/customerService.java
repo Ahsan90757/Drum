@@ -25,4 +25,7 @@ public class customerService {
     public Optional<customer> getCustomerByName(String customerName) {
         return customerRepositoryObj.findByCustomerName(customerName);
     }
+    public Optional<customer> getCustomerByNumber(String customerNumber) {
+        return customerRepositoryObj.findByCustomerNumber(customerNumber);
+    }
 }

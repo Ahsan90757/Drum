@@ -6,21 +6,15 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "customers")
-public class customer {
+public class transactionAccount {
 
     @Id
     private ObjectId id;
-    String customerName;
-    @Indexed(unique = true)
-    String customerNumber;
-    Date lastTransaction;
-    int balance;
+    String accountName;
+    String paymentMethod;
+    int amount ;
 }

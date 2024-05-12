@@ -20,21 +20,29 @@ public class transaction {
 
     @Id
     private ObjectId id;
+    private int transactionNumber;
     private String customerNumber;
     private String transactionType;
     private Date date;
     private String paymentMethod;
     private String receivedBy;
     private int amountReceived;
+
     private int totalAmount;
-//    private int remainingAmount;
+    //    private int remainingAmount;
     private List<transactionItem> transactionItems;
+    private List<transactionAccount> transactionAccounts;
+
+    public int getTransactionNumber(transaction transaction) {
+        return  transactionNumber;
+    }
+
+
+//    private List<account> payments;c
 
 //    public List<transactionItem> getTransactionItems(){
 //        return transactionItems;
 //    }
 
-    void test(){
 
-    }
 }

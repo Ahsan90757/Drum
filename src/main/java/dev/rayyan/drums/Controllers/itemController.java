@@ -31,7 +31,7 @@ public class itemController {
     public ResponseEntity<Optional<item>> getItemByName(@PathVariable String name) {
         return new ResponseEntity<Optional<item>>(itemServiceObj.getItemByName(name), HttpStatus.OK);
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    //@CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("")
     public ResponseEntity<item> createItem(@RequestBody item item){
         return new ResponseEntity<item>(itemServiceObj.createItem(item),HttpStatus.CREATED);

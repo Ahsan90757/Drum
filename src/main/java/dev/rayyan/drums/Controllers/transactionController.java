@@ -35,10 +35,14 @@ public class transactionController {
         return new ResponseEntity<>(createdTransaction, HttpStatus.CREATED);
     }
 
-    @GetMapping("/customer/{customerNumber}")
-    @ResponseBody
-    public List<transaction> getTransactionsByCustomerId(@PathVariable String customerNumber) {
-        return transactionServiceObj.transactionsByCustomerNumber(customerNumber);
-    }
+//    @GetMapping("/customer/{customerNumber}")
+//    @ResponseBody
+//    public List<transaction> getTransactionsByCustomerId(@PathVariable String customerNumber) {
+//        return transactionServiceObj.transactionsByCustomerNumber(customerNumber);
+//    }
 
+    @GetMapping("/topTransaction")
+    public ResponseEntity<Optional<transaction>> getTopTransaction() {
+        return new ResponseEntity<Optional<transaction>>(transactionServiceObj.getTopTransaction(),HttpStatus.OK);
+    }
 }

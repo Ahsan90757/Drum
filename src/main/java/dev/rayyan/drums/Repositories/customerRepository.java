@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface customerRepository extends MongoRepository<customer, String> {
     Optional<customer> findByCustomerName(String customerName);
-
+    Optional<customer> findByCustomerNumber(String customerNumber);
     void deleteByCustomerName(String customerName);
 }
