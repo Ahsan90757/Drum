@@ -45,16 +45,27 @@ public class transactionService {
 
     public transaction createTransaction(transaction transaction) {
 
-        int balance = transaction.getTotalAmount() - transaction.getAmountReceived();
-
+        //int balance = ;
+        int totalAmount= transaction.getTotalAmount();
+        int amountReceived = transaction.getAmountReceived();
         // Find the corresponding customer
+
 
         Optional<customer> optionalCustomer = customerRepositoryObj.findByCustomerNumber(transaction.getCustomerNumber());
         if (optionalCustomer.isPresent()) {
             customer existingCustomer = optionalCustomer.get();
             // Update customer's lastTransaction date and balance
             existingCustomer.setLastTransaction(new Date());
-            existingCustomer.setBalance(existingCustomer.getBalance() + balance);
+
+           if(transaction.getTransactionType().equals("selling")){
+            existingCustomer.setBalance(existingCustomer.getBalance() + totalAmount);
+            existingCustomer.setBalance(existingCustomer.getBalance() - amountReceived);
+            }
+            else{
+                existingCustomer.setBalance(existingCustomer.getBalance() - totalAmount);
+                existingCustomer.setBalance(existingCustomer.getBalance() + amountReceived);
+            }
+
 
             // Save updated customer
             customerRepositoryObj.save(existingCustomer);

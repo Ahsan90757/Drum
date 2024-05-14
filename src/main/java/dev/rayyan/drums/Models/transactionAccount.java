@@ -15,6 +15,5 @@ public class transactionAccount {
     @Id
     private ObjectId id;
     String accountName;
-    String paymentMethod;
     int amount ;
 }
