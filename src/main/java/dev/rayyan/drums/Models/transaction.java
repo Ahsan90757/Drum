@@ -27,6 +27,7 @@ public class transaction {
     private String paymentMethod;
     private String receivedBy;
     private int amountReceived;
+    private String Description;
 
     private int totalAmount;
     //    private int remainingAmount;
