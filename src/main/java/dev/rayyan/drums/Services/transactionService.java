@@ -6,6 +6,9 @@ import dev.rayyan.drums.Models.transaction;
 import dev.rayyan.drums.Models.transactionItem;
 import dev.rayyan.drums.Models.item;
 import dev.rayyan.drums.Models.customer;
+import dev.rayyan.drums.Models.account;
+import dev.rayyan.drums.Repositories.accountRepository;
+import dev.rayyan.drums.Models.transactionAccount;
 
 import lombok.Data;
 import org.bson.types.ObjectId;
@@ -33,6 +36,8 @@ public class transactionService {
     transactionRepository transactionRepositoryObj;
     @Autowired
     customerRepository customerRepositoryObj;
+    @Autowired
+    accountRepository accountRepositoryObj;
 
 
     public List<transaction> allTransactions(){
@@ -71,6 +76,22 @@ public class transactionService {
             customerRepositoryObj.save(existingCustomer);
         }
 
+
+        for (transactionAccount transactionAccount : transaction.getTransactionAccounts()) {
+            String accountName = transactionAccount.getAccountName();
+            Optional<account> optionalAccount = accountRepositoryObj.findByAccountName(accountName);
+            if (optionalAccount.isPresent()) {
+                account existingAccount = optionalAccount.get();
+                int balance  = existingAccount.getBalance();
+                if(transaction.getTransactionType().equals("selling")){
+                    existingAccount.setBalance(existingAccount.getBalance() + transactionAccount.getAmount());
+                }
+                else{
+                    existingAccount.setBalance(existingAccount.getBalance() - transactionAccount.getAmount());
+                }
+                accountRepositoryObj.save(existingAccount);
+            }
+        }
 
         Optional<transaction> latestTransaction = transactionRepositoryObj.findTopByOrderByTransactionNumberDesc();
         if(latestTransaction.isPresent()){
