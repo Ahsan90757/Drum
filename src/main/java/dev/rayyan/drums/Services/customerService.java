@@ -6,6 +6,8 @@ import dev.rayyan.drums.Repositories.customerRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.awt.desktop.SystemEventListener;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +35,10 @@ public class customerService {
     public customer updateCustomer(String customerNumber, customer updatedCustomer) {
         customer existingCustomer = customerRepositoryObj.findByCustomerNumber(customerNumber).orElse(null);
         if (existingCustomer != null) {
-            existingCustomer.setCustomerName(updatedCustomer.getCustomerName());
             existingCustomer.setCustomerNumber(updatedCustomer.getCustomerNumber());
+            System.out.println( existingCustomer.getCustomerNumber());
+            existingCustomer.setCustomerName(updatedCustomer.getCustomerName());
+            existingCustomer.setBalance(updatedCustomer.getBalance());
             customerRepositoryObj.save(existingCustomer);
         }
         return existingCustomer;
@@ -42,6 +46,8 @@ public class customerService {
 
     public void deleteCustomer(String customerNumber) {
         customer existingCustomer = customerRepositoryObj.findByCustomerNumber(customerNumber).orElse(null);
+        System.out.println(existingCustomer);
+
         if (existingCustomer != null) {
             customerRepositoryObj.delete(existingCustomer);
         }

@@ -21,6 +21,7 @@ public class customerController
     @GetMapping
     public ResponseEntity<List<customer>> getAllCustomers(){
         return new ResponseEntity<List<customer>>(customerServiceObj.getAllCustomers(),HttpStatus.OK);
+
     }
     @GetMapping("/{Id}")
     public ResponseEntity<Optional<customer>> getCustomerById(@PathVariable String id){
@@ -52,14 +53,20 @@ public class customerController
             return new ResponseEntity<>("Failed to delete item", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("/{customerNumber}")
+    @PatchMapping("/{customerNumber}")
     public ResponseEntity<customer> updateCustomer(@PathVariable String customerNumber, @RequestBody customer updatedCustomer) {
+
+        System.out.println(updatedCustomer);
+//        customer updated = customerServiceObj.updateCustomer(updatedCustomer.getBalance(), customerNumber, updatedCustomer);
         customer updated = customerServiceObj.updateCustomer(customerNumber, updatedCustomer);
+        System.out.println(updated);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{customerNumber}")
+    @DeleteMapping("/customerNumber/{customerNumber}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable String customerNumber) {
+
+        System.out.println("HERE"+ customerNumber);
         customerServiceObj.deleteCustomer(customerNumber);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
