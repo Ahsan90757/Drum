@@ -52,4 +52,15 @@ public class customerController
             return new ResponseEntity<>("Failed to delete item", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping("/{customerNumber}")
+    public ResponseEntity<customer> updateCustomer(@PathVariable String customerNumber, @RequestBody customer updatedCustomer) {
+        customer updated = customerServiceObj.updateCustomer(customerNumber, updatedCustomer);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{customerNumber}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String customerNumber) {
+        customerServiceObj.deleteCustomer(customerNumber);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
