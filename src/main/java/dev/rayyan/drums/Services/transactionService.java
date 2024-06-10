@@ -66,7 +66,7 @@ public class transactionService {
             existingCustomer.setBalance(existingCustomer.getBalance() + totalAmount);
             existingCustomer.setBalance(existingCustomer.getBalance() - amountReceived);
             }
-            else{
+            else if(transaction.getTransactionType().equals("buying")){
                 existingCustomer.setBalance(existingCustomer.getBalance() - totalAmount);
                 existingCustomer.setBalance(existingCustomer.getBalance() + amountReceived);
             }
