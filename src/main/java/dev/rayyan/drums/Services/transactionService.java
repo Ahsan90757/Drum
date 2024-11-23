@@ -51,8 +51,8 @@ public class transactionService {
     public transaction createTransaction(transaction transaction) {
 
         //int balance = ;
-        int totalAmount= transaction.getTotalAmount();
-        int amountReceived = transaction.getAmountReceived();
+        float totalAmount= transaction.getTotalAmount();
+        float amountReceived = transaction.getAmountReceived();
         // Find the corresponding customer
 
 
@@ -66,7 +66,7 @@ public class transactionService {
             existingCustomer.setBalance(existingCustomer.getBalance() + totalAmount);
             existingCustomer.setBalance(existingCustomer.getBalance() - amountReceived);
             }
-            else if(transaction.getTransactionType().equals("buying")){
+            else{
                 existingCustomer.setBalance(existingCustomer.getBalance() - totalAmount);
                 existingCustomer.setBalance(existingCustomer.getBalance() + amountReceived);
             }
@@ -82,7 +82,7 @@ public class transactionService {
             Optional<account> optionalAccount = accountRepositoryObj.findByAccountName(accountName);
             if (optionalAccount.isPresent()) {
                 account existingAccount = optionalAccount.get();
-                int balance  = existingAccount.getBalance();
+                float balance  = existingAccount.getBalance();
                 if(transaction.getTransactionType().equals("selling")){
                     existingAccount.setBalance(existingAccount.getBalance() + transactionAccount.getAmount());
                 }
@@ -103,12 +103,12 @@ public class transactionService {
 
         for (transactionItem transactionItem : transaction.getTransactionItems()) {
             String itemName = transactionItem.getItemName();
-            double quantity = transactionItem.getQuantity();
+            float quantity = transactionItem.getQuantity();
             Optional<item> optionalItem = itemRepositoryObj.findByName(itemName);
 
             if (optionalItem.isPresent()) {
                 item existingItem = optionalItem.get();
-                double remainingQuantity = existingItem.getRemainingQuantity();
+                float remainingQuantity = existingItem.getRemainingQuantity();
                 if ("buying".equalsIgnoreCase(transaction.getTransactionType())) {
                     existingItem.setRemainingQuantity(remainingQuantity + quantity);
                 } else {

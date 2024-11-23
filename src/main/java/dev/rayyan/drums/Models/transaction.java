@@ -26,7 +26,7 @@ public class transaction {
     private Date date;
     private String paymentMethod;
     private String receivedBy;
-    private int amountReceived;
+    private float amountReceived;
     private String Description;
 
     private int totalAmount;

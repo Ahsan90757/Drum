@@ -32,7 +32,7 @@ public class customerController
         return new ResponseEntity<Optional<customer>>(customerServiceObj.getCustomerByName(customerName), HttpStatus.OK);
     }
 
-    @GetMapping("/name/{customerNumber}")
+    @GetMapping("/number/{customerNumber}")
     public ResponseEntity<Optional<customer>> getCustomerByNumber(@PathVariable String customerNumber) {
         return new ResponseEntity<Optional<customer>>(customerServiceObj.getCustomerByNumber(customerNumber), HttpStatus.OK);
     }

@@ -15,5 +15,5 @@ public class transactionAccount {
     @Id
     private ObjectId id;
     String accountName;
-    int amount ;
+    float amount ;
 }

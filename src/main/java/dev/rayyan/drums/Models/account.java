@@ -18,5 +18,5 @@ public class account {
     private ObjectId id;
     @Indexed(unique = true)
     String accountName;
-    int balance ;
+    float balance ;
 }

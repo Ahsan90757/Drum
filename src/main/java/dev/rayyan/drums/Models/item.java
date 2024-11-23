@@ -18,5 +18,5 @@ public class item {
     @Id
     private ObjectId id;
     private String name;
-    private double remainingQuantity;
+    private float remainingQuantity;
 }

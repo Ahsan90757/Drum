@@ -22,5 +22,5 @@ public class customer {
     @Indexed(unique = true)
     String customerNumber;
     Date lastTransaction;
-    int balance;
+    float balance;
 }

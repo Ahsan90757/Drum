@@ -11,10 +11,10 @@ import org.bson.types.ObjectId;
 public class transactionItem {
 
     private String itemName;
-    private int quantity;
-    private int unitPrice;
+    private float quantity;
+    private float unitPrice;
 
-    public int getTotalPrice() {
+    public float getTotalPrice() {
         return quantity * unitPrice;
     }
 }
