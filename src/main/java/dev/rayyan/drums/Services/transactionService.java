@@ -10,20 +10,11 @@ import dev.rayyan.drums.Models.account;
 import dev.rayyan.drums.Repositories.accountRepository;
 import dev.rayyan.drums.Models.transactionAccount;
 
-import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 
-import javax.swing.text.html.Option;
-import java.io.ObjectInput;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +52,7 @@ public class transactionService {
             customer existingCustomer = optionalCustomer.get();
             // Update customer's lastTransaction date and balance
             existingCustomer.setLastTransaction(new Date());
+            existingCustomer.setReminder(transaction.getReminder());
 
            if(transaction.getTransactionType().equals("selling")){
             existingCustomer.setBalance(existingCustomer.getBalance() + totalAmount);

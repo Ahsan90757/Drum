@@ -28,6 +28,7 @@ public class transaction {
     private String receivedBy;
     private float amountReceived;
     private String Description;
+    private String Reminder;
 
     private int totalAmount;
     //    private int remainingAmount;

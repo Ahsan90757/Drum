@@ -22,5 +22,6 @@ public class customer {
     @Indexed(unique = true)
     String customerNumber;
     Date lastTransaction;
+    String reminder;
     float balance;
 }

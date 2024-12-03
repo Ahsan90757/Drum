@@ -39,6 +39,7 @@ public class customerService {
             System.out.println( existingCustomer.getCustomerNumber());
             existingCustomer.setCustomerName(updatedCustomer.getCustomerName());
             existingCustomer.setBalance(updatedCustomer.getBalance());
+            existingCustomer.setReminder(updatedCustomer.getReminder());
             customerRepositoryObj.save(existingCustomer);
         }
         return existingCustomer;
