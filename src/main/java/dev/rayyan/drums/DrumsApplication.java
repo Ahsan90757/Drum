@@ -13,8 +13,8 @@ public class DrumsApplication {
 		SpringApplication.run(DrumsApplication.class, args);
 	}
 
-	@GetMapping("/")
-	public String getRoot() {
-		return ("Hello World\n");
-	}
+	// @GetMapping("/")
+	// public String getRoot() {
+	// 	return ("Hello World\n");
+	// }
 }
