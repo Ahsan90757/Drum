@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class transactionService {
@@ -119,5 +121,39 @@ public class transactionService {
     }
     public Optional<transaction> getTopTransaction (){
         return transactionRepositoryObj.findTopByOrderByTransactionNumberDesc();
+    }
+
+    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemAndLastNTransactions(int numberOfTransactions, String itemName) {
+        // Fetch the last N transactions sorted by date (descending order)
+        List<transaction> transactions = transactionRepositoryObj.findTopNByOrderByDateDesc(numberOfTransactions);
+
+        // Group the transactions by date and map each transaction item to the desired format
+        return transactions.stream()
+                .flatMap(t -> t.getTransactionItems().stream()
+                        .filter(item -> item.getItemName().equalsIgnoreCase(itemName)) // Filter by item name
+                        .map(item -> {
+                            Map<String, Object> result = new HashMap<>();
+                            result.put("customerNumber", t.getCustomerNumber());
+                            result.put("customerName", t.getTransactionAccounts().isEmpty() ? "Unknown" :
+                                    t.getTransactionAccounts().get(0).getAccountName());
+                            result.put("quantity", item.getQuantity());
+                            result.put("transactionDate", t.getDate());
+                            return result;
+                        })
+                )
+                .collect(Collectors.groupingBy(
+                        map -> {
+                            // Convert to LocalDate if necessary
+                            Object dateObject = map.get("transactionDate");
+                            if (dateObject instanceof Date) {
+                                return ((Date) dateObject).toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate();
+                            }
+                            return (LocalDate) dateObject; // If it's already LocalDate
+                        },
+                        LinkedHashMap::new, // Maintain insertion order
+                        Collectors.toList() // Collect results into lists
+                ));
     }
 }

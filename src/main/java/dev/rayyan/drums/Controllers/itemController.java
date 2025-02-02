@@ -22,11 +22,6 @@ public class itemController {
         return new ResponseEntity<List<item>>(itemServiceObj.getAllItems(),HttpStatus.OK );
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Optional<item>> getItemById(@PathVariable String id) {
-//        return new ResponseEntity<Optional<item>>(itemServiceObj.getItemById(id), HttpStatus.OK);
-//    }
-
     @GetMapping("/name/{name}")
     public ResponseEntity<Optional<item>> getItemByName(@PathVariable String name) {
         return new ResponseEntity<Optional<item>>(itemServiceObj.getItemByName(name), HttpStatus.OK);

@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -45,4 +47,10 @@ public class transactionController {
     public ResponseEntity<Optional<transaction>> getTopTransaction() {
         return new ResponseEntity<Optional<transaction>>(transactionServiceObj.getTopTransaction(),HttpStatus.OK);
     }
+    @GetMapping("/sales/lastN/{numberOfTransactions}/{itemName}")
+    public ResponseEntity<Map<LocalDate, List<Map<String, Object>>>> getSalesByItemAndLastNTransactions(
+            @PathVariable int numberOfTransactions, @PathVariable String itemName) {
+        return ResponseEntity.ok(transactionServiceObj.getSalesByItemAndLastNTransactions(numberOfTransactions, itemName));
+    }
+
 }
