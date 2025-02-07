@@ -12,6 +12,9 @@ import dev.rayyan.drums.Models.transactionAccount;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -123,37 +126,102 @@ public class transactionService {
         return transactionRepositoryObj.findTopByOrderByTransactionNumberDesc();
     }
 
-    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemAndLastNTransactions(int numberOfTransactions, String itemName) {
-        // Fetch the last N transactions sorted by date (descending order)
-        List<transaction> transactions = transactionRepositoryObj.findTopNByOrderByDateDesc(numberOfTransactions);
+//    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemAndLastNTransactions(int numberOfTransactions, String itemName) {
+//        // Fetch the last N transactions sorted by date (descending order)
+//        List<transaction> transactions = transactionRepositoryObj.findTopNByOrderByDateDesc(numberOfTransactions);
+//
+//        // Group the transactions by date and map each transaction item to the desired format
+//        return transactions.stream()
+//                .flatMap(t -> t.getTransactionItems().stream()
+//                        .filter(item -> item.getItemName().equalsIgnoreCase(itemName)) // Filter by item name
+//                        .map(item -> {
+//                            Map<String, Object> result = new HashMap<>();
+//                            result.put("customerNumber", t.getCustomerNumber());
+//                            result.put("customerName", t.getTransactionAccounts().isEmpty() ? "Unknown" :
+//                                    t.getTransactionAccounts().get(0).getAccountName());
+//                            result.put("quantity", item.getQuantity());
+//                            result.put("transactionDate", t.getDate());
+//                            return result;
+//                        })
+//                )
+//                .collect(Collectors.groupingBy(
+//                        map -> {
+//                            // Convert to LocalDate if necessary
+//                            Object dateObject = map.get("transactionDate");
+//                            if (dateObject instanceof Date) {
+//                                return ((Date) dateObject).toInstant()
+//                                        .atZone(ZoneId.systemDefault())
+//                                        .toLocalDate();
+//                            }
+//                            return (LocalDate) dateObject; // If it's already LocalDate
+//                        },
+//                        LinkedHashMap::new, // Maintain insertion order
+//                        Collectors.toList() // Collect results into lists
+//                ));
+//    }
 
-        // Group the transactions by date and map each transaction item to the desired format
+//    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemAndLastNTransactions(int numberOfTransactions, String itemName) {
+//        // Fetch transactions using the repository method
+//        Pageable pageable = PageRequest.of(0, numberOfTransactions, Sort.by(Sort.Direction.DESC, "date"));
+//        List<transaction> transactions = transactionRepositoryObj.findTopNByItemNameOrderByDateDesc(itemName, pageable);
+//
+//        return transactions.stream()
+//                .flatMap(t -> t.getTransactionItems().stream()
+//                        .filter(item -> item.getItemName().equalsIgnoreCase(itemName)) // Filter by item name
+//                        .map(item -> {
+//                            Map<String, Object> result = new HashMap<>();
+//                            result.put("customerNumber", t.getCustomerNumber());
+//                            result.put("customerName", t.getTransactionAccounts().isEmpty() ? "Unknown" :
+//                                    t.getTransactionAccounts().getFirst().getAccountName());
+//                            result.put("quantity", t.getTransactionType().equalsIgnoreCase("buying") ?
+//                                    item.getQuantity() : -item.getQuantity()); // Positive for buying, negative for selling
+//                            result.put("transactionDate", t.getDate()); // Keep Date type for now
+//                            return result;
+//                        })
+//                )
+//                .collect(Collectors.groupingBy(
+//                        map -> {
+//                            Date date = (Date) map.get("transactionDate");
+//                            return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convert Date to LocalDate
+//                        },
+//                        LinkedHashMap::new, // Maintain insertion order (latest transactions first)
+//                        Collectors.toList() // Group into lists
+//                ));
+//    }
+
+    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemAndLastNTransactions(int numberOfTransactions, String itemName) {
+        // Fetch transactions sorted by _id (newest first)
+        Pageable pageable = PageRequest.of(0, numberOfTransactions, Sort.by(Sort.Direction.DESC, "_id"));
+        List<transaction> transactions = transactionRepositoryObj.findTopNByItemNameOrderByIdDesc(itemName, pageable);
+
         return transactions.stream()
                 .flatMap(t -> t.getTransactionItems().stream()
                         .filter(item -> item.getItemName().equalsIgnoreCase(itemName)) // Filter by item name
                         .map(item -> {
                             Map<String, Object> result = new HashMap<>();
                             result.put("customerNumber", t.getCustomerNumber());
-                            result.put("customerName", t.getTransactionAccounts().isEmpty() ? "Unknown" :
-                                    t.getTransactionAccounts().get(0).getAccountName());
-                            result.put("quantity", item.getQuantity());
-                            result.put("transactionDate", t.getDate());
+// Fetch customer name using customerNumber
+                            Optional<customer> customerOptional = customerRepositoryObj.findByCustomerNumber(t.getCustomerNumber());
+                            String customerName = customerOptional.map(customer::getCustomerName).orElse("Unknown");
+                            result.put("customerName", customerName);
+                            result.put("quantity", t.getTransactionType().equalsIgnoreCase("buying") ?
+                                    item.getQuantity() : -item.getQuantity()); // Positive for buying, negative for selling
+                            result.put("transactionDate", extractDateFromObjectId(t.getId())); // Extract date from _id
                             return result;
                         })
                 )
                 .collect(Collectors.groupingBy(
                         map -> {
-                            // Convert to LocalDate if necessary
-                            Object dateObject = map.get("transactionDate");
-                            if (dateObject instanceof Date) {
-                                return ((Date) dateObject).toInstant()
-                                        .atZone(ZoneId.systemDefault())
-                                        .toLocalDate();
-                            }
-                            return (LocalDate) dateObject; // If it's already LocalDate
+                            Date date = (Date) map.get("transactionDate");
+                            return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convert Date to LocalDate
                         },
-                        LinkedHashMap::new, // Maintain insertion order
-                        Collectors.toList() // Collect results into lists
+                        LinkedHashMap::new, // Maintain insertion order (latest transactions first)
+                        Collectors.toList() // Group into lists
                 ));
     }
+    private Date extractDateFromObjectId(ObjectId objectId) {
+        return new Date(objectId.getTimestamp() * 1000L); // Convert seconds to milliseconds
+    }
+
+
 }
