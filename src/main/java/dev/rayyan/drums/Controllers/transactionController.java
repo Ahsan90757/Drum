@@ -57,7 +57,4 @@ public class transactionController {
         @PathVariable String itemName, @PathVariable int page, @PathVariable int size) {
             return ResponseEntity.ok(transactionServiceObj.getSalesByItemWithPagination(itemName, page, size));
     }
-
-
-
 }
