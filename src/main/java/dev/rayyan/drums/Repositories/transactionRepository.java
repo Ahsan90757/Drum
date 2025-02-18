@@ -17,6 +17,8 @@ public interface transactionRepository extends MongoRepository<transaction , Obj
     //List<transaction> findTopNByOrderByDateDesc(int numberOfTransactions);
     @Query("{ 'transactionItems.itemName': ?0 }")
     List<transaction> findTopNByItemNameOrderByIdDesc(String itemName, Pageable pageable);
+    @Query("{ 'transactionItems.itemName': ?0 }")
+    List<transaction> findByItemName(String itemName, Pageable pageable);
 
 
 }

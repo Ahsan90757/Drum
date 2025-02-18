@@ -189,10 +189,10 @@ public class transactionService {
 //                ));
 //    }
 
-    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemAndLastNTransactions(int numberOfTransactions, String itemName) {
-        // Fetch transactions sorted by _id (newest first)
-        Pageable pageable = PageRequest.of(0, numberOfTransactions, Sort.by(Sort.Direction.DESC, "_id"));
-        List<transaction> transactions = transactionRepositoryObj.findTopNByItemNameOrderByIdDesc(itemName, pageable);
+    public Map<LocalDate, List<Map<String, Object>>> getSalesByItemWithPagination(String itemName, int page, int size) {
+        // Fetch paginated transactions
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "_id")); // Sorted by newest first
+        List<transaction> transactions = transactionRepositoryObj.findByItemName(itemName, pageable);
 
         return transactions.stream()
                 .flatMap(t -> t.getTransactionItems().stream()
@@ -200,7 +200,7 @@ public class transactionService {
                         .map(item -> {
                             Map<String, Object> result = new HashMap<>();
                             result.put("customerNumber", t.getCustomerNumber());
-// Fetch customer name using customerNumber
+                            // Fetch customer name using customerNumber
                             Optional<customer> customerOptional = customerRepositoryObj.findByCustomerNumber(t.getCustomerNumber());
                             String customerName = customerOptional.map(customer::getCustomerName).orElse("Unknown");
                             result.put("customerName", customerName);
@@ -219,6 +219,8 @@ public class transactionService {
                         Collectors.toList() // Group into lists
                 ));
     }
+
+
     private Date extractDateFromObjectId(ObjectId objectId) {
         return new Date(objectId.getTimestamp() * 1000L); // Convert seconds to milliseconds
     }

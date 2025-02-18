@@ -47,10 +47,17 @@ public class transactionController {
     public ResponseEntity<Optional<transaction>> getTopTransaction() {
         return new ResponseEntity<Optional<transaction>>(transactionServiceObj.getTopTransaction(),HttpStatus.OK);
     }
-    @GetMapping("/sales/lastN/{numberOfTransactions}/{itemName}")
-    public ResponseEntity<Map<LocalDate, List<Map<String, Object>>>> getSalesByItemAndLastNTransactions(
-            @PathVariable int numberOfTransactions, @PathVariable String itemName) {
-        return ResponseEntity.ok(transactionServiceObj.getSalesByItemAndLastNTransactions(numberOfTransactions, itemName));
+//    @GetMapping("/sales/lastN/{numberOfTransactions}/{itemName}")
+//    public ResponseEntity<Map<LocalDate, List<Map<String, Object>>>> getSalesByItemAndLastNTransactions(
+//            @PathVariable int numberOfTransactions, @PathVariable String itemName) {
+//        return ResponseEntity.ok(transactionServiceObj.getSalesByItemAndLastNTransactions(numberOfTransactions, itemName));
+//    }
+    @GetMapping("/sales/paginated/{itemName}/{page}/{size}")
+    public ResponseEntity<Map<LocalDate, List<Map<String, Object>>>> getSalesByItemWithPagination(
+        @PathVariable String itemName, @PathVariable int page, @PathVariable int size) {
+            return ResponseEntity.ok(transactionServiceObj.getSalesByItemWithPagination(itemName, page, size));
     }
+
+
 
 }
