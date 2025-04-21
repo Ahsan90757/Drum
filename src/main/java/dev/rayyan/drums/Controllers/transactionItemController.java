@@ -30,8 +30,4 @@ public class transactionItemController {
     public ResponseEntity<Optional<transactionItem>> getTransactionItemById(@PathVariable ObjectId id){
         return new ResponseEntity<Optional<transactionItem>>(transactionItemServiceObj.transactionItemById(id), HttpStatus.OK);
     }
-//    @GetMapping("/name/{itemName}")
-//    public ResponseEntity<List<transactionItem>> getTransactionItemById(@PathVariable String itemName){
-//        return new ResponseEntity<List<transactionItem>>(transactionItemServiceObj.transactionItemByName(itemName), HttpStatus.OK);
-//    }
 }

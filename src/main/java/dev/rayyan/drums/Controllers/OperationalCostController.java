@@ -25,13 +25,13 @@ public class OperationalCostController {
         return operationalCostService.getOperationalCostById(id);
     }
 
-    @PostMapping
-    public OperationalCost addOperationalCost(@RequestBody OperationalCost operationalCost) {
-        return operationalCostService.addOperationalCost(operationalCost);
-    }
 
     @DeleteMapping("/{id}")
     public void deleteOperationalCost(@PathVariable String id) {
         operationalCostService.deleteOperationalCost(id);
+    }
+    @PostMapping
+    public OperationalCost createOperationalCost(@RequestBody OperationalCost request) {
+        return operationalCostService.saveOperationalCost(request);
     }
 }

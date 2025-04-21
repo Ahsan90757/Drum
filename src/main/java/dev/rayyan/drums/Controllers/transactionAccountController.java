@@ -20,7 +20,4 @@ public class transactionAccountController {
     public ResponseEntity<List<transactionAccount>> getAllTransactionAccounts(){
         return new ResponseEntity<List<transactionAccount>>(transactionAccountServiceObj.getAllTransactionAccounts(), HttpStatus.OK);
     }
-
-
-
 }

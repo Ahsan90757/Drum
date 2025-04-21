@@ -20,4 +20,8 @@ public class OperationalCost {
     private Category category;
     private double amount;
     private LocalDateTime date; // Full date and time
+
+    public String getCategoryId() {
+        return category.getId();
+    }
 }
